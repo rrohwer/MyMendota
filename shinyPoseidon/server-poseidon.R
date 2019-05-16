@@ -1,19 +1,101 @@
-# Atul played around with example layouts and new shiny syntax
+# RRR 5/16/19
+
+library(lubridate)
+
+# parse the ysi data into R ----
+
+ysi.file <- "data/example_YSI.csv"
+
+ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
+
+ysi$Timestamp <- parse_date_time(x = ysi$Timestamp, orders = "mdyHMS")
+ysi$Timestamp <- floor_date(x = ysi$Timestamp, unit = "day")
+
+ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
+
+ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
+
+# try plots here ----
+
+date.options <- as.character(unique(ysi$Timestamp))
+# chosen.date <- date.options[5]
+# chosen.date.index <- which(as.character(ysi$Timestamp) == chosen.date)
+# 
+# par(mar = c(3,3,2,.5))
+# plot(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Temperature..C.)), axes = F, ann = F)
+# points(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
+# axis(side = 1, at = c(0, max(ysi$Temperature..C.)), labels = F, lwd.ticks = 0)
+# axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
+# axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
+# mtext(text = "Temperature (C)", side = 1, line = 1.75, outer = F)
+# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+# mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+# mtext(text = chosen.date, side = 3, line = 0, outer = F, cex = 1.5)
+
+# ----
+
+year.options <- as.character(unique(year(ysi$Timestamp)))
+# chosen.year <- year.options[1]
+# chosen.year.index <- which(as.character(year(ysi$Timestamp)) == chosen.year)
+# 
+# heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
+# heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
+# heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
+# image(heatmap.data, axes = F)
+# axis(side = 1, label = F)
+# axis(side = 1, tick = F, line = -.5)
+# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+# mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+# mtext(text = chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
+
+# define server inputs ----
 
 server <- function(input, output){
   
-  output$temp.profile <- renderPlot(
-    {
-    cat('hello', str(input$selected.option))
-    x = c(1,2,3,4)
-    y = as.numeric(input$selected.option) * x
-    plot(x,y, ylim=c(0,input$ymax), type='o')
-    title(main=paste('hello',input$selected.option)) 
-    }
-  )
+  output$date.menu <- renderUI({
+    selectInput("chosen.date", "Choose a Sample Date", as.list(date.options))
+  })
   
-  output$temp.profile2 <- renderPlot(plot(c(1,2,3),c(1,2,3),main=input$selected.option))
-  output$temp.profile3 <- renderPlot(plot(c(1,2,3),c(5,6,7),main=input$ymax))
+  output$year.menu <- renderUI({
+    selectInput("chosen.year", "Choose a Sampling Season", as.list(year.options))
+  })
+  
+  output$temp.profile1 <- renderPlot({
+    chosen.date.index <- which(as.character(ysi$Timestamp) == input$chosen.date)
+    par(mar = c(3,3,2,.5))
+    plot(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Temperature..C.)), axes = F, ann = F)
+    points(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
+    axis(side = 1, at = c(0, max(ysi$Temperature..C.)), labels = F, lwd.ticks = 0)
+    axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
+    axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
+    mtext(text = "Temperature (C)", side = 1, line = 1.75, outer = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+    mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+    mtext(text = input$chosen.date, side = 3, line = 0, outer = F, cex = 1.5)
+  })
+  
+  output$temp.profile2 <- renderPlot({
+    chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$chosen.year)
+    heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
+    heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
+    heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
+    image(heatmap.data, axes = F)
+    #axis(side = 1, label = F)
+    axis(side = 1, tick = T, line = 0,
+         at = 2015 + yday(date.options)/365,
+         label = date.options,
+         srt = 90
+         #at = 2015 + c(176, 182, 195, 204, 217, 222, 266, 278, 293, 310)/365,
+         #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
+         )
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+    mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+    mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
+  })
   
 }
 
