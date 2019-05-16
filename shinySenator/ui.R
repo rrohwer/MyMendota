@@ -1,8 +1,4 @@
-# RRR 4-11-17
-# Final Project for LTER datasets class
-# Use all the new packages to make a simple YSI depth profile plot
-
-#library(shiny)
+# Atul played around with example layouts and new shiny syntax
 
 ui <- fluidPage(
 
