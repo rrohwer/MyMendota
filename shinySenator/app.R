@@ -1,8 +1,8 @@
 library(shiny)
 
 
-source('ui.R')
-source('server.R')
+source('ui-senator.R')
+source('server-senator.R')
 
 
 shinyApp(ui=ui, server=server)
