@@ -1,9 +1,8 @@
 # RRR 5/16/19
 
-library(lubridate)
-
 # parse the ysi data into R ----
 
+# do this for troubleshooting outside of running app (b/c app runs w/in poseidon folder but RProject is 1 folder up): setwd("shinyPoseidon")
 ysi.file <- "data/example_YSI.csv"
 
 ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
@@ -15,9 +14,11 @@ ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
 
 ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
 
+date.options <- as.character(unique(ysi$Timestamp))
+year.options <- as.character(unique(year(ysi$Timestamp)))
+
 # try plots here ----
 
-date.options <- as.character(unique(ysi$Timestamp))
 # chosen.date <- date.options[5]
 # chosen.date.index <- which(as.character(ysi$Timestamp) == chosen.date)
 # 
@@ -34,15 +35,14 @@ date.options <- as.character(unique(ysi$Timestamp))
 # mtext(text = chosen.date, side = 3, line = 0, outer = F, cex = 1.5)
 
 # ----
-
-year.options <- as.character(unique(year(ysi$Timestamp)))
+# 
 # chosen.year <- year.options[1]
 # chosen.year.index <- which(as.character(year(ysi$Timestamp)) == chosen.year)
 # 
 # heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
 # heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
 # heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
-# image(heatmap.data, axes = F)
+# image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
 # axis(side = 1, label = F)
 # axis(side = 1, tick = F, line = -.5)
 # axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
@@ -82,7 +82,7 @@ server <- function(input, output){
     heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
     heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
     heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
-    image(heatmap.data, axes = F)
+    image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
     #axis(side = 1, label = F)
     axis(side = 1, tick = T, line = 0,
          at = 2015 + yday(date.options)/365,
