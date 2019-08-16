@@ -1,8 +1,11 @@
-# RRR 5/16/19
+# We want to process the YSI data before reading it into the function:
+library(shiny)
+library(lubridate)
+library(akima)
+library(colorspace)
 
-# parse the ysi data into R ----
 
-# do this for troubleshooting outside of running app (b/c app runs w/in poseidon folder but RProject is 1 folder up): setwd("shinyPoseidon")
+setwd("~/Documents/MyMendota/shinyPoseidon/")
 ysi.file <- "data/example_YSI.csv"
 
 ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
@@ -12,56 +15,28 @@ ysi$Timestamp <- floor_date(x = ysi$Timestamp, unit = "day")
 
 ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
 
+#Convert depths to negative soo 0 is on top:
 ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
 
-date.options <- as.character(unique(ysi$Timestamp))
-year.options <- as.character(unique(year(ysi$Timestamp)))
+# date.options <- as.character(unique(ysi$Timestamp))
+# year.options <- as.character(unique(year(ysi$Timestamp)))
 
-# try plots here ----
+secchi <- readRDS("~/Documents/MyMendota/shinyPoseidon/data/secchi.rds")
+# Add a year column to secchi table:
+library(tidyr)
+secchi2 <- secchi %>% separate(sample.date, 
+                               c("Year","Month", "Day"), remove=FALSE)
+secchi2$secchi.depth.m <- -1*(secchi2$secchi.depth.m)
+secchi2$yday <- yday(secchi2$sample.date)
 
-# chosen.date <- date.options[5]
-# chosen.date.index <- which(as.character(ysi$Timestamp) == chosen.date)
-# 
-# par(mar = c(3,3,2,.5))
-# plot(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Temperature..C.)), axes = F, ann = F)
-# points(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
-# axis(side = 1, at = c(0, max(ysi$Temperature..C.)), labels = F, lwd.ticks = 0)
-# axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
-# axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
-# mtext(text = "Temperature (C)", side = 1, line = 1.75, outer = F)
-# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
-# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
-# mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
-# mtext(text = chosen.date, side = 3, line = 0, outer = F, cex = 1.5)
+library(ggplot2)
 
-# ----
-# 
-# chosen.year <- year.options[1]
-# chosen.year.index <- which(as.character(year(ysi$Timestamp)) == chosen.year)
-# 
-# heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
-# heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
-# heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
-# image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
-# axis(side = 1, label = F)
-# axis(side = 1, tick = F, line = -.5)
-# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
-# axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
-# mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
-# mtext(text = chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
+library(data.table)
+ysi.DT <- as.data.table(ysi)
 
-# define server inputs ----
-
-server <- function(input, output){
+server <- function(input,output){
   
-  output$date.menu <- renderUI({
-    selectInput("chosen.date", "Choose a Sample Date", as.list(date.options))
-  })
-  
-  output$year.menu <- renderUI({
-    selectInput("chosen.year", "Choose a Sampling Season", as.list(year.options))
-  })
-  
+  ## Temperature Tab plot:
   output$temp.profile1 <- renderPlot({
     chosen.date.index <- which(as.character(ysi$Timestamp) == input$chosen.date)
     par(mar = c(3,3,2,.5))
@@ -78,8 +53,13 @@ server <- function(input, output){
   })
   
   output$temp.profile2 <- renderPlot({
-    chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$chosen.year)
-    heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
+    #chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$data.range)
+    # heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
+    # This only works if you have a data.table
+    
+    heatmap.data <- ysi.DT[Timestamp>=input$date.range[1] & Timestamp<=input$date.range[2]]
+    # test
+    #input$data[1] = "201"
     heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
     heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
     image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
@@ -90,12 +70,73 @@ server <- function(input, output){
          srt = 90
          #at = 2015 + c(176, 182, 195, 204, 217, 222, 266, 278, 293, 310)/365,
          #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
-         )
+    )
     axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
     axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
     mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
-    mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
+    mtext(text = paste(as.character(input$date.range[1]),"to",as.character(input$date.range[2])), side = 3, line = 0, outer = F, cex = 1.5)
+  })
+  
+  ## DO tab plot
+  
+  output$do.profile1 <- renderPlot({
+    chosen.date.index <- which(as.character(ysi$Timestamp) == input$chosen.date)
+    par(mar = c(3,3,2,.5))
+    plot(x = ysi$Dissolved.Oxygen..mg.L.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Dissolved.Oxygen..mg.L.)), axes = F, ann = F)
+    points(x = ysi$Dissolved.Oxygen..mg.L.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
+    axis(side = 1, at = c(0, max(ysi$Dissolved.Oxygen..mg.L.)), labels = F, lwd.ticks = 0)
+    axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
+    axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
+    mtext(text = "Dissolved Oxygen (mg/L)", side = 1, line = 1.75, outer = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+    mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+    mtext(text = input$chosen.date, side = 3, line = 0, outer = F, cex = 1.5)
+  })
+  
+  output$do.profile2 <- renderPlot({
+    chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$data.range)
+    # heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
+    # This only works if you have a data.table
+    
+    heatmap.data <- ysi.DT[Timestamp>=input$date.range[1] & Timestamp<=input$date.range[2]]
+    # test
+    #input$data[1] = "201"
+    heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
+    heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Dissolved.Oxygen..mg.L., duplicate = "strip")
+    image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
+    #axis(side = 1, label = F)
+    axis(side = 1, tick = T, line = 0,
+         at = 2015 + yday(date.options)/365,
+         label = date.options,
+         srt = 90
+         #at = 2015 + c(176, 182, 195, 204, 217, 222, 266, 278, 293, 310)/365,
+         #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
+    )
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+    axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+    mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+    mtext(text = paste(as.character(input$date.range[1]),"to",as.character(input$date.range[2])), side = 3, line = 0, outer = F, cex = 1.5)
+  })
+  
+  
+  ## Secchi Tab plot
+  # Line plot and colour in red the selected year
+  output$secchi.plot <- renderPlot({
+    
+    p <- ggplot(data=secchi2, aes(x=yday, y=secchi.depth.m, group=Year)) +
+      geom_line() +
+      geom_point() +
+      xlim(0,365) +
+      ylab("Depth(m)")+
+      xlab("Day of Year")
+    # Add the line for just the year you want:
+    sub.secchi2<-subset(secchi2, secchi2$Year == input$chosen.year)
+    # test:
+    #sub.secchi2 <- subset(secchi2, secchi2$Year == 2014)
+    p + geom_line(data = sub.secchi2, aes(x=yday, y=secchi.depth.m, col="red"))+
+      geom_point(data = sub.secchi2, aes(x=yday, y=secchi.depth.m, col="red"))
+    
   })
   
 }
-
