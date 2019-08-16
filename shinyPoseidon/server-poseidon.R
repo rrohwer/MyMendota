@@ -5,23 +5,27 @@ library(akima)
 library(colorspace)
 
 
-setwd("~/Documents/MyMendota/shinyPoseidon/")
-ysi.file <- "data/example_YSI.csv"
+#setwd("~/Documents/MyMendota/shinyPoseidon/")
+# ysi.file <- "data/example_YSI.csv"
+# 
+# ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
+# 
+# ysi$sample.date <- parse_date_time(x = ysi$sample.date, orders = "mdyHMS")
+# ysi$sample.date <- floor_date(x = ysi$sample.date, unit = "day")
+# 
+# ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
+# 
+# #Convert depths to negative soo 0 is on top:
+# ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
+# xw
+# # date.options <- as.character(unique(ysi$sample.date))
+# # year.options <- as.character(unique(year(ysi$sample.date)))
 
-ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
+ysi <- readRDS("data/ysi.rds")
+#str(ysi)
+ysi$neg.depth <- -1*ysi$depth.m
 
-ysi$Timestamp <- parse_date_time(x = ysi$Timestamp, orders = "mdyHMS")
-ysi$Timestamp <- floor_date(x = ysi$Timestamp, unit = "day")
-
-ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
-
-#Convert depths to negative soo 0 is on top:
-ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
-
-# date.options <- as.character(unique(ysi$Timestamp))
-# year.options <- as.character(unique(year(ysi$Timestamp)))
-
-secchi <- readRDS("~/Documents/MyMendota/shinyPoseidon/data/secchi.rds")
+secchi <- readRDS("data/secchi.rds")
 # Add a year column to secchi table:
 library(tidyr)
 secchi2 <- secchi %>% separate(sample.date, 
@@ -38,11 +42,11 @@ server <- function(input,output){
   
   ## Temperature Tab plot:
   output$temp.profile1 <- renderPlot({
-    chosen.date.index <- which(as.character(ysi$Timestamp) == input$chosen.date)
+    chosen.date.index <- which(as.character(ysi$sample.date) == input$chosen.date)
     par(mar = c(3,3,2,.5))
-    plot(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Temperature..C.)), axes = F, ann = F)
-    points(x = ysi$Temperature..C.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
-    axis(side = 1, at = c(0, max(ysi$Temperature..C.)), labels = F, lwd.ticks = 0)
+    plot(x = ysi$temp.C[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$temp.C)), axes = F, ann = F)
+    points(x = ysi$temp.C[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
+    axis(side = 1, at = c(0, max(ysi$temp.C)), labels = F, lwd.ticks = 0)
     axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
     axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
     mtext(text = "Temperature (C)", side = 1, line = 1.75, outer = F)
@@ -53,15 +57,15 @@ server <- function(input,output){
   })
   
   output$temp.profile2 <- renderPlot({
-    #chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$data.range)
+    #chosen.year.index <- which(as.character(year(ysi$sample.date)) == input$data.range)
     # heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
     # This only works if you have a data.table
     
-    heatmap.data <- ysi.DT[Timestamp>=input$date.range[1] & Timestamp<=input$date.range[2]]
+    heatmap.data <- ysi.DT[sample.date>=input$date.range[1] & sample.date<=input$date.range[2]]
     # test
     #input$data[1] = "201"
-    heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
-    heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Temperature..C., duplicate = "strip")
+    heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
+    heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$temp.C, duplicate = "strip")
     image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
     #axis(side = 1, label = F)
     axis(side = 1, tick = T, line = 0,
@@ -80,11 +84,11 @@ server <- function(input,output){
   ## DO tab plot
   
   output$do.profile1 <- renderPlot({
-    chosen.date.index <- which(as.character(ysi$Timestamp) == input$chosen.date)
+    chosen.date.index <- which(as.character(ysi$sample.date) == input$chosen.date)
     par(mar = c(3,3,2,.5))
-    plot(x = ysi$Dissolved.Oxygen..mg.L.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$Dissolved.Oxygen..mg.L.)), axes = F, ann = F)
-    points(x = ysi$Dissolved.Oxygen..mg.L.[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
-    axis(side = 1, at = c(0, max(ysi$Dissolved.Oxygen..mg.L.)), labels = F, lwd.ticks = 0)
+    plot(x = ysi$DO.mg.L[chosen.date.index], y = ysi$neg.depth[chosen.date.index], type = "n", ylim = c(-20,0), xlim = c(0, max(ysi$DO.mg.L)), axes = F, ann = F)
+    points(x = ysi$DO.mg.L[chosen.date.index], y = ysi$neg.depth[chosen.date.index], pch = 21, col = "black", bg = adjustcolor("black",.5))
+    axis(side = 1, at = c(0, max(ysi$DO.mg.L)), labels = F, lwd.ticks = 0)
     axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
     axis(side = 1, at = seq(from = 0, to = 25, by = 5), tick = 0, labels = T, line = -.5)
     mtext(text = "Dissolved Oxygen (mg/L)", side = 1, line = 1.75, outer = F)
@@ -95,15 +99,15 @@ server <- function(input,output){
   })
   
   output$do.profile2 <- renderPlot({
-    chosen.year.index <- which(as.character(year(ysi$Timestamp)) == input$data.range)
+    chosen.year.index <- which(as.character(year(ysi$sample.date)) == input$data.range)
     # heatmap.data <- ysi[chosen.year.index, c(1,11,6)]
     # This only works if you have a data.table
     
-    heatmap.data <- ysi.DT[Timestamp>=input$date.range[1] & Timestamp<=input$date.range[2]]
+    heatmap.data <- ysi.DT[sample.date>=input$date.range[1] & sample.date<=input$date.range[2]]
     # test
     #input$data[1] = "201"
-    heatmap.data$Timestamp <- decimal_date(heatmap.data$Timestamp)
-    heatmap.data <- interp(x = heatmap.data$Timestamp, y = heatmap.data$neg.depth, z = heatmap.data$Dissolved.Oxygen..mg.L., duplicate = "strip")
+    heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
+    heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$DO.mg.L, duplicate = "strip")
     image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
     #axis(side = 1, label = F)
     axis(side = 1, tick = T, line = 0,
