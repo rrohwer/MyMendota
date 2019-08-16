@@ -1,10 +1,4 @@
 # We want to process the YSI data before reading it into the function:
-library(shiny)
-library(lubridate)
-library(akima)
-library(colorspace)
-
-
 #setwd("~/Documents/MyMendota/shinyPoseidon/")
 # ysi.file <- "data/example_YSI.csv"
 # 
@@ -18,24 +12,20 @@ library(colorspace)
 # #Convert depths to negative soo 0 is on top:
 # ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
 # xw
-date.options <- as.character(unique(ysi$sample.date))
-year.options <- as.character(unique(year(ysi$sample.date)))
-
 ysi <- readRDS("data/ysi.rds")
 #str(ysi)
 ysi$neg.depth <- -1*ysi$depth.m
 
+date.options <- as.character(unique(ysi$sample.date))
+year.options <- as.character(unique(year(ysi$sample.date)))
+
 secchi <- readRDS("data/secchi.rds")
 # Add a year column to secchi table:
-library(tidyr)
 secchi2 <- secchi %>% separate(sample.date, 
                                c("Year","Month", "Day"), remove=FALSE)
 secchi2$secchi.depth.m <- -1*(secchi2$secchi.depth.m)
 secchi2$yday <- yday(secchi2$sample.date)
 
-library(ggplot2)
-
-library(data.table)
 ysi.DT <- as.data.table(ysi)
 
 server <- function(input,output){
