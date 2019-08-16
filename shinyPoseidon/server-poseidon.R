@@ -18,8 +18,8 @@ library(colorspace)
 # #Convert depths to negative soo 0 is on top:
 # ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
 # xw
-# # date.options <- as.character(unique(ysi$sample.date))
-# # year.options <- as.character(unique(year(ysi$sample.date)))
+date.options <- as.character(unique(ysi$sample.date))
+year.options <- as.character(unique(year(ysi$sample.date)))
 
 ysi <- readRDS("data/ysi.rds")
 #str(ysi)
