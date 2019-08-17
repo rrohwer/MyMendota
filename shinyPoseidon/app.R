@@ -18,9 +18,8 @@ secchi$yday <- yday(secchi$sample.date)
 date.options <- as.character(unique(ysi$sample.date))
 year.options <- as.character(unique(year(ysi$sample.date)))
 
+
 source('ui-poseidon.R')
 source('server-poseidon.R', local = TRUE)
-
-ysi <- readRDS("data/ysi.rds")
 
 shinyApp(ui=ui, server=server)
