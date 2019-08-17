@@ -15,11 +15,10 @@ ui <- fluidPage(
       selectInput(inputId="chosen.year",
                   label="Choose a year to highlight on the Secchi Depth plot",
                   choices = list("2014"=2014,"2015"=2015,"2016"=2016,"2017"=2017,"2018"=2018,"2019"=2019),
-                  selected=2014),
+                  selected=2014)
       
-      img(src = "trina_lab.png", height = 200, width = 200)
-    )
-    ,
+      
+    ),
     
     mainPanel(
       tabsetPanel(type = "tabs",
@@ -34,7 +33,9 @@ ui <- fluidPage(
                   tabPanel("Secchi", 
                            plotOutput("secchi.plot")
                   )
-      )
+      ),
+      br(),
+      img(src = "trina_lab.png", height = 200, width = 200)
     )
   )
 )
