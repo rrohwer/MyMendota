@@ -1,45 +1,7 @@
-# We want to process the YSI data before reading it into the function:
-library(shiny)
-library(lubridate)
-library(akima)
-library(colorspace)
 
-
-#setwd("~/Documents/MyMendota/shinyPoseidon/")
-# ysi.file <- "data/example_YSI.csv"
-# 
-# ysi <- read.csv(file = ysi.file, header = TRUE, colClasses = "character", stringsAsFactors = F)
-# 
-# ysi$sample.date <- parse_date_time(x = ysi$sample.date, orders = "mdyHMS")
-# ysi$sample.date <- floor_date(x = ysi$sample.date, unit = "day")
-# 
-# ysi[ ,c(2:6,9)] <- apply(X = ysi[ ,c(2:6,9)], MARGIN = 2, FUN = as.numeric)
-# 
-# #Convert depths to negative soo 0 is on top:
-# ysi <- cbind(ysi, "neg.depth" = ysi$Folder * -1)
-# xw
-date.options <- as.character(unique(ysi$sample.date))
-year.options <- as.character(unique(year(ysi$sample.date)))
-
-ysi <- readRDS("data/ysi.rds")
-#str(ysi)
-ysi$neg.depth <- -1*ysi$depth.m
-
-secchi <- readRDS("data/secchi.rds")
-# Add a year column to secchi table:
-library(tidyr)
-secchi2 <- secchi %>% separate(sample.date, 
-                               c("Year","Month", "Day"), remove=FALSE)
-secchi2$secchi.depth.m <- -1*(secchi2$secchi.depth.m)
-secchi2$yday <- yday(secchi2$sample.date)
-
-library(ggplot2)
-
-library(data.table)
-ysi.DT <- as.data.table(ysi)
 
 server <- function(input,output){
-  
+  str(ysi)
   ## Temperature Tab plot:
   output$temp.profile1 <- renderPlot({
     chosen.date.index <- which(as.character(ysi$sample.date) == input$chosen.date)
@@ -128,18 +90,18 @@ server <- function(input,output){
   # Line plot and colour in red the selected year
   output$secchi.plot <- renderPlot({
     
-    p <- ggplot(data=secchi2, aes(x=yday, y=secchi.depth.m, group=Year)) +
+    p <- ggplot(data=secchi, aes(x=yday, y=neg.depth, group=Year)) +
       geom_line() +
       geom_point() +
       xlim(0,365) +
       ylab("Depth(m)")+
       xlab("Day of Year")
     # Add the line for just the year you want:
-    sub.secchi2<-subset(secchi2, secchi2$Year == input$chosen.year)
+    sub.secchi<-subset(secchi, secchi$Year == input$chosen.year)
     # test:
-    #sub.secchi2 <- subset(secchi2, secchi2$Year == 2014)
-    p + geom_line(data = sub.secchi2, aes(x=yday, y=secchi.depth.m, col="red"))+
-      geom_point(data = sub.secchi2, aes(x=yday, y=secchi.depth.m, col="red"))
+    #sub.secchi <- subset(secchi, secchi$Year == 2014)
+    p + geom_line(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))+
+      geom_point(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))
     
   })
   

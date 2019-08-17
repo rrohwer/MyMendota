@@ -6,17 +6,18 @@ ui <- fluidPage(
       dateInput(inputId = "chosen.date",
                 label="Choose a date",format = "yyyy-mm-dd"),
       
-      dateRangeInput(inputId = "date.range",
-                     label="Choose a date range",format = "yyyy-mm-dd",
-                     min = min(ysi$sample.date), max=max(ysi$sample.date),
-                     start = min(ysi$sample.date), end=max(ysi$sample.date)),
+      dateRangeInput(inputId = "date.range", # need to move this to server script with renderUI to not hard-code it
+                     label="Choose a date range",format = "yyyy-mm-dd", 
+                     min = parse_date_time("2014-05-30", "ymd"), max=parse_date_time("2019-08-14", "ymd"),
+                     start =parse_date_time("2014-05-30", "ymd"), end=parse_date_time("2019-08-14", "ymd")
+                     ),
       
       selectInput(inputId="chosen.year",
                   label="Choose a year to highlight on the Secchi Depth plot",
                   choices = list("2014"=2014,"2015"=2015,"2016"=2016,"2017"=2017,"2018"=2018,"2019"=2019),
                   selected=2014),
       
-      img(src = "~/Documents/MyMendota/shinyPoseidon/images/trina_lab.png", height = 200, width = 200)
+      img(src = "trina_lab.png", height = 200, width = 200)
     )
     ,
     
