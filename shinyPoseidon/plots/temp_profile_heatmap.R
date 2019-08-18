@@ -1,8 +1,9 @@
-
-# # Define "input" list for troubleshooting:
-# cat("shit comment out the troubleshooting hard-coding!")
-# input <- list(NULL)
-# input$chosen.year <- "2014"
+if(!exists("INAPP")){
+  cat("[Info] temp_profile_heatmap.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
+  # Define "input" list for troubleshooting:
+  input <- list(NULL)
+  input$chosen.year <- "2014"
+}
 
 
 

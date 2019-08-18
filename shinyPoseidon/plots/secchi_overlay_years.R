@@ -1,8 +1,10 @@
-
-# # Define "input" list for troubleshooting:
-# cat("shit comment out the troubleshooting hard-coding!")
-# input <- list(NULL)
-# input$chosen.year <- "2014"
+if(!exists("INAPP")){
+  cat("[Info] secchi_overlay_years.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
+  input <- list(NULL)
+  input$chosen.year <- "2014"
+} #else {
+#  cat("[Info] secchi_overlay_years.R called by shiny app.\n")
+#}
 
 p <- ggplot(data=secchi, aes(x=yday, y=neg.depth, group=Year)) +
   geom_line() +

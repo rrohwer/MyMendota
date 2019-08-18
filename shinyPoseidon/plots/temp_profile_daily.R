@@ -1,9 +1,10 @@
-
-# # Define "input" list for troubleshooting:
-# cat("shit comment out the troubleshooting hard-coding!")
-# input <- list(NULL)
-# input$chosen.year <- "2014"
-# input$slider.day <- "Jul 4"
+if(!exists("INAPP")){
+  cat("[Info] temp_profile_daily.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
+  # Define "input" list for troubleshooting:
+  input <- list(NULL)
+  input$chosen.year <- "2014"
+  input$slider.day <- "Jul 4"
+}
 
 
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
