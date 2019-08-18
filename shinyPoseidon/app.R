@@ -16,7 +16,6 @@ secchi <- separate(data = secchi, col = sample.date, into = c("Year", "Month", "
 secchi$neg.depth <- -1 * secchi$secchi.depth.m
 secchi$yday <- yday(secchi$sample.date)
 
-
 source('ui-poseidon.R')
 source('server-poseidon.R', local = TRUE)
 

@@ -4,8 +4,6 @@
 # input <- list(NULL)
 # input$chosen.year <- "2014"
 
-
-
 p <- ggplot(data=secchi, aes(x=yday, y=neg.depth, group=Year)) +
   geom_line() +
   geom_point() +
