@@ -1,10 +1,9 @@
-
-# # Define "input" list for troubleshooting:
-# cat("shit comment out the troubleshooting hard-coding!")
-# input <- list(NULL)
-# input$chosen.year <- "2014"
-
-
+if(!exists("INAPP")){
+  cat("[Info] DO_profile_heatmap.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
+  # Define "input" list for troubleshooting:
+  input <- list(NULL)
+  input$chosen.year <- "2014"
+}
 
 index <- which(ysi$Year == input$chosen.year)
 heatmap.data <- ysi[index, c(1,10,7)]
