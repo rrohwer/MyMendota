@@ -1,8 +1,16 @@
-
-# # Define "input" list for troubleshooting:
-# cat("shit comment out the troubleshooting hard-coding!")
-# input <- list(NULL)
-# input$chosen.year <- "2014"
+if(!exists("INAPP")){
+  cat("[Info] secchi_overlay_years.R sourced for troubleshooting.\n")
+  ysi <- readRDS("data/ysi.rds")
+  ysi$neg.depth <- -1 * ysi$depth.m
+  secchi <- readRDS("data/secchi.rds")
+  secchi <- separate(data = secchi, col = sample.date, into = c("Year", "Month", "Day"), remove = FALSE)
+  secchi$neg.depth <- -1 * secchi$secchi.depth.m
+  secchi$yday <- yday(secchi$sample.date)
+  input <- list(NULL)
+  input$chosen.year <- "2014"
+} else {
+  cat("[Info] secchi_overlay_years.R called by shiny app.\n")
+}
 
 p <- ggplot(data=secchi, aes(x=yday, y=neg.depth, group=Year)) +
   geom_line() +

@@ -19,4 +19,8 @@ secchi$yday <- yday(secchi$sample.date)
 source('ui-poseidon.R')
 source('server-poseidon.R', local = TRUE)
 
+# plotting scripts use this global to figure out if the app is running the
+# script or if the script is being sourced as a stand-alone script for debugging
+INAPP = TRUE
+
 shinyApp(ui=ui, server=server)
