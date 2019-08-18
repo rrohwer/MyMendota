@@ -12,10 +12,10 @@ ui <- fluidPage(
                      start =parse_date_time("2014-05-30", "ymd"), end=parse_date_time("2019-08-14", "ymd")
                      ),
       
-      selectInput(inputId="chosen.year",
-                  label="Choose a year to highlight on the Secchi Depth plot",
-                  choices = list("2014"=2014,"2015"=2015,"2016"=2016,"2017"=2017,"2018"=2018,"2019"=2019),
-                  selected=2014)
+      uiOutput("year.dropdown.menu"), 
+      
+      uiOutput("slider.text.widget")
+      
       
       
     ),

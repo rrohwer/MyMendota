@@ -2,6 +2,21 @@
 
 server <- function(input,output){
   
+  ## widgets that decide their options based on data
+  
+  output$year.dropdown.menu <- renderUI({
+    year.choices <- as.character(unique(ysi$Year))
+    names(year.choices) <- year.choices
+    selectInput(inputId = "chosen.year", label = "Choose a year", choices = year.choices, selected = 2019)
+  })
+  
+  output$slider.text.widget <- renderUI({
+    index <- as.character(ysi$Year) == input$chosen.year
+    day.choices <- unique(ysi$sample.date[index])
+    day.choices <- paste(month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
+    sliderTextInput(inputId = "slider.value", label = "Choose a sample date", choices = day.choices)
+  })
+  
   ## Temperature Tab 
   
   output$temp.profile1 <- renderPlot({
