@@ -8,13 +8,16 @@ if(!exists("INAPP")){
 index <- which(ysi$Year == input$chosen.year)
 heatmap.data <- ysi[index, c(1,10,7)]
 valid.indexes = !is.na(heatmap.data$DO.mg.L)
+unique.dates <- decimal_date(unique(heatmap.data$sample.date))
 heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
 heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.data$neg.depth[valid.indexes], z = heatmap.data$DO.mg.L[valid.indexes], duplicate = "strip")
 
 par(mar = c(3,3,2,.5))
 
 image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
-axis(side = 1)
+axis(side = 1, lwd = 2)
+axis(side = 1, at= unique.dates, col = "red", labels=F)#, labels = unique.dates)
+
 # axis(side = 1, tick = T, line = 0, at = 2015 + yday(date.options)/365, srt = 90)
 #at = 2015 + c(176, 182, 195, 204, 217, 222, 266, 278, 293, 310)/365,
 #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
