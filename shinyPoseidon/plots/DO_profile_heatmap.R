@@ -2,13 +2,14 @@ if(!exists("INAPP")){
   cat("[Info] DO_profile_heatmap.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
   # Define "input" list for troubleshooting:
   input <- list(NULL)
-  input$chosen.year <- "2014"
+  input$chosen.year <- "2015"
 }
 
 index <- which(ysi$Year == input$chosen.year)
 heatmap.data <- ysi[index, c(1,10,7)]
+valid.indexes = !is.na(heatmap.data$DO.mg.L)
 heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
-heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$DO.mg.L, duplicate = "strip")
+heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.data$neg.depth[valid.indexes], z = heatmap.data$DO.mg.L[valid.indexes], duplicate = "strip")
 
 par(mar = c(3,3,2,.5))
 
