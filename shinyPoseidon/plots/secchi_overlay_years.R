@@ -36,7 +36,7 @@ p <- p + geom_line(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))+
 # If there is a secchi depth for that date add a secchi image, otherwise just highlight the year:
 if (dim(my.secchi)[1] != 0) {
     my.secchi$image <- "www/secchi.png"
-    p <- p + geom_image(data = my.secchi, aes(image=image),asp = 0.5)
+    p <- p + geom_image(data = my.secchi, aes(image=image),asp = 1.90, size=0.025)
 }
 
 p <- p+theme(legend.position="none")
