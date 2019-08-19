@@ -29,10 +29,11 @@ my.secchi <- secchi[index, ]
 
 # Add an image to the index of 
 
-p <- p + geom_line(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))+
-  geom_area(data = sub.secchi, aes(x=yday, y=neg.depth, fill="red", alpha=0.5))+
-  geom_point(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))
+p <- p + geom_line(data = sub.secchi, aes(x=yday, y=neg.depth),colour="lightblue")+
+  geom_area(data = sub.secchi, aes(x=yday, y=neg.depth), fill="lightblue", alpha=0.85)+
+  geom_point(data = sub.secchi, aes(x=yday, y=neg.depth), col="lightblue")
 
+p
 # If there is a secchi depth for that date add a secchi image, otherwise just highlight the year:
 if (dim(my.secchi)[1] != 0) {
     my.secchi$image <- "www/secchi.png"
