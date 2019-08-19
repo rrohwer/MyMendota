@@ -13,13 +13,18 @@ my.ysi <- ysi[index, ]
 y.lim <- c(-20,0)
 x.lim <- c(0, max(ysi$DO.mg.L, na.rm = TRUE))
 
+t=seq(0,21,0.5)
+y=sin(t)
+plot(t,y, ylim = y.lim, type="l", xlab="time", ylab="Sine wave")
 
 par(mar = c(3,3,2,.5))
 plot(x = my.ysi$DO.mg.L, y = my.ysi$neg.depth, type = "n", ylim = y.lim, xlim = x.lim, axes = F, ann = F)
+plot(t,y, ylim = c(-20,1), xlim=x.lim, type="l", axes=F, ann=F)
+
 points(x = my.ysi$DO.mg.L, y = my.ysi$neg.depth, pch = 21, col = "black", bg = adjustcolor("black",.5))
 axis(side = 1, at = x.lim, labels = F, lwd.ticks = 0)
 axis(side = 1, at = seq(from = 0, to = 20, by = 5), labels = F)
-axis(side = 1, at = seq(from = 0, to = 20, by = 5), tick = 0, labels = T, line = -.5)
+axis(side = 1, at = seq(from = 0, to = 20, by = 5), tick = 0, labels = F, line = -.5)
 mtext(text = "Dissolved Oxygen (mg/L)", side = 1, line = 1.75, outer = F)
 axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
 axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
