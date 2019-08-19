@@ -8,7 +8,12 @@ ui <- fluidPage(
       
       uiOutput("slider.text.widget"),
       
-      uiOutput("TempSelection")
+      #uiOutput("TempSelection")
+      radioButtons(inputId = "TempPref",
+      label="Temperature Units:",
+      choices = c("Celcius", "Farenheit"),
+      selected="Celcius",
+      inline = TRUE)
 
     ),
     
