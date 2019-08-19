@@ -18,6 +18,9 @@ x.lim.F <- c(32, max(ysi$temp.F, na.rm = TRUE))
 t.c=seq(0,25,0.5)
 y.c=sin(t.c)
 
+t.f = seq(0,84,0.5)
+y.f = sin(t.f)
+
 
 par(mar = c(3,3,2,.5))
 
@@ -36,7 +39,7 @@ if (input$TempPref == "Celcius"){
   
 } else {
   plot(x = my.ysi$temp.F, y = my.ysi$neg.depth, type = "n", ylim = y.lim, xlim = x.lim.F, axes = F, ann = F)
-  plot(t,y, ylim = c(-20,1), xlim=x.lim, type="l", axes=F, ann=F)
+  plot(t.f,y.f, ylim = c(-20,1), xlim=x.lim.F, type="l", axes=F, ann=F)
   points(x = my.ysi$temp.F, y = my.ysi$neg.depth, pch = 21, col = "black", bg = adjustcolor("black",.5))
   axis(side = 1, at = x.lim.F, labels = F, lwd.ticks = 0)
   axis(side = 1, at = seq(from = 32, to = 77, by = 5), labels = F)
