@@ -19,14 +19,6 @@ server <- function(input,output){
                })
                })
   
-  output$TempSelection <- renderUI({
-    radioButtons(inputId = "TempPref",
-                         label="What temperature format do you want to display?",
-                         choices = c("Farenheit","Celcius"),
-                         selected="Celcius",
-                         inline = TRUE)
-  })
-  
   
   ## Temperature Tab 
   
