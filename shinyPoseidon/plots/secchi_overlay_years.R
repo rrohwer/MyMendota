@@ -24,9 +24,18 @@ my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), order
 index <- which(secchi$sample.date == my.date)
 my.secchi <- secchi[index, ]
 
+# If the date is in YSI and in Secchi (not empty!)
+
+
+# Add an image to the index of 
 
 p <- p + geom_line(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))+
-  geom_point(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))+
-  geom_point(data= my.secchi, aes(x=yday, y=neg.depth), colour="green", size=8)
+  geom_point(data = sub.secchi, aes(x=yday, y=neg.depth, col="red"))
+
+# If there is a secchi depth for that date add a secchi image, otherwise just highlight the year:
+if (dim(my.secchi)[1] != 0) {
+    my.secchi$image <- "www/secchi.png"
+    p <- p + geom_image(data = my.secchi, aes(image=image),asp = 0.5)
+}
 
 print(p) # ggplot objects must be explicitly returned with print() when called by sourcing.

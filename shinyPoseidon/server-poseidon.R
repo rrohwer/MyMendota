@@ -14,7 +14,7 @@ server <- function(input,output){
                handlerExpr = {output$slider.text.widget <- renderUI({
                  index <- as.character(ysi$Year) == input$chosen.year
                  day.choices <- unique(ysi$sample.date[index])
-                 day.choices <- paste(month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
+                 day.choices <- paste(lubridate::month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
                  sliderTextInput(inputId = "slider.day", label = "Choose a sample date", choices = day.choices)
                })
                }
