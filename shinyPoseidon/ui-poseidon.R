@@ -8,6 +8,7 @@ ui <- fluidPage(
       
       uiOutput("slider.text.widget")
       
+      
     ),
     
     mainPanel(
@@ -23,6 +24,7 @@ ui <- fluidPage(
                   tabPanel("Secchi", 
                            plotOutput("secchi.plot")
                   )
+                  
       ),
       br(),
       img(src = "trina_lab.png", height = 200, width = 200)
