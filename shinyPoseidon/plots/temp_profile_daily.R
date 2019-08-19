@@ -13,7 +13,7 @@ my.ysi <- ysi[index, ]
 
 y.lim <- c(-20,0)
 x.lim <- c(0, max(ysi$temp.C, na.rm = TRUE))
-x.lim.F <- c(0, max(ysi$temp.F, na.rm = TRUE))
+x.lim.F <- c(32, max(ysi$temp.F, na.rm = TRUE))
 
 
 par(mar = c(3,3,2,.5))
@@ -34,13 +34,10 @@ if (input$TempPref == "Celcius"){
   plot(x = my.ysi$temp.F, y = my.ysi$neg.depth, type = "n", ylim = y.lim, xlim = x.lim.F, axes = F, ann = F)
   points(x = my.ysi$temp.F, y = my.ysi$neg.depth, pch = 21, col = "black", bg = adjustcolor("black",.5))
   axis(side = 1, at = x.lim.F, labels = F, lwd.ticks = 0)
-<<<<<<< HEAD
-  axis(side = 1, at = seq(from = 0, to = 85, by = 10), labels = F)
-  axis(side = 1, at = seq(from = 0, to = 85, by = 10), tick = 0, labels = T, line = -.5)
-=======
+#  axis(side = 1, at = seq(from = 0, to = 85, by = 10), labels = F)
+#  axis(side = 1, at = seq(from = 0, to = 85, by = 10), tick = 0, labels = T, line = -.5)
   axis(side = 1, at = seq(from = 32, to = 77, by = 5), labels = F)
   axis(side = 1, at = seq(from = 32, to = 77, by = 5), tick = 0, labels = T, line = -.5)
->>>>>>> dfd28b3bb7c7e1a1b2a1d67cfd542d95ca4ef439
   mtext(text = "Temperature (F)", side = 1, line = 1.75, outer = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
