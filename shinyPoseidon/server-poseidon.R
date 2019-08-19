@@ -17,55 +17,62 @@ server <- function(input,output){
                  day.choices <- paste(lubridate::month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
                  sliderTextInput(inputId = "slider.day", label = "Choose a sample date", choices = day.choices)
                })
-               }
-  )
+               })
+  
+  output$TempSelection <- renderUI({
+    radioButtons(inputId = "TempPref",
+                         label="What temperature format do you want to display?",
+                         choices = c("Farenheit","Celcius"),
+                         selected="Celcius",
+                         inline = TRUE)
+  })
   
   
   ## Temperature Tab 
   
   observeEvent( input$slider.day, { 
-  output$temp.profile1 <- renderPlot({
-    cat("\ntemp tab- input$slider.day\n")
-    cat(input$slider.day,'\n')
-    cat(str(input$slider.day),'\n')
-    source(file = "plots/temp_profile_daily.R", local = TRUE)
-  }) } )
+    output$temp.profile1 <- renderPlot({
+      cat("\ntemp tab- input$slider.day\n")
+      cat(input$slider.day,'\n')
+      cat(str(input$slider.day),'\n')
+      source(file = "plots/temp_profile_daily.R", local = TRUE)
+    }) } )
   
   observeEvent( input$chosen.year, {
-  output$temp.profile2 <- renderPlot({
-    cat("\ntemp tab- input$chosen.year\n")
-    cat(input$chosen.year, "\n")
-    cat(str(input$chosen.year), "\n")
-    source(file = "plots/temp_profile_heatmap.R", local = TRUE)
-  }) } )
+    output$temp.profile2 <- renderPlot({
+      cat("\ntemp tab- input$chosen.year\n")
+      cat(input$chosen.year, "\n")
+      cat(str(input$chosen.year), "\n")
+      source(file = "plots/temp_profile_heatmap.R", local = TRUE)
+    }) } )
   
   ## DO Tab
   
   observeEvent( input$slider.day, {
-  output$do.profile1 <- renderPlot({
-    cat("\nDO tab- input$slider.day\n")
-    cat(input$slider.day, "\n")
-    cat(str(input$slider.day), "\n")
-    source(file = "plots/DO_profile_daily.R", local = TRUE)
-  }) } )
+    output$do.profile1 <- renderPlot({
+      cat("\nDO tab- input$slider.day\n")
+      cat(input$slider.day, "\n")
+      cat(str(input$slider.day), "\n")
+      source(file = "plots/DO_profile_daily.R", local = TRUE)
+    }) } )
   
   observeEvent( input$chosen.year, {
-  output$do.profile2 <- renderPlot({
-    cat("\nDO tab- input$chosen.year\n")
-    cat(input$chosen.year, "\n")
-    cat(str(input$chosen.year), "\n")
-    source(file = "plots/DO_profile_heatmap.R", local = TRUE)
-  }) })
+    output$do.profile2 <- renderPlot({
+      cat("\nDO tab- input$chosen.year\n")
+      cat(input$chosen.year, "\n")
+      cat(str(input$chosen.year), "\n")
+      source(file = "plots/DO_profile_heatmap.R", local = TRUE)
+    }) })
   
   
   ## Secchi Tab 
   
   observeEvent(eventExpr = input$chosen.year, {
-  output$secchi.plot <- renderPlot({
-    cat("\nsecchi tab- input$chosen.year\n")
-    cat(input$chosen.year, "\n")
-    cat(str(input$chosen.year), "\n")
-    source(file = "plots/secchi_overlay_years.R", local = TRUE)
-  }) } )
+    output$secchi.plot <- renderPlot({
+      cat("\nsecchi tab- input$chosen.year\n")
+      cat(input$chosen.year, "\n")
+      cat(str(input$chosen.year), "\n")
+      source(file = "plots/secchi_overlay_years.R", local = TRUE)
+    }) } )
   
 }

@@ -4,7 +4,7 @@ library(akima)
 library(colorspace)
 library(tidyr)
 library(ggplot2)
-library(data.table)
+#library(data.table)
 library(shinyWidgets)
 #install.packages("ggimage")
 library(ggimage)
@@ -12,6 +12,8 @@ library(ggimage)
 ysi <- readRDS("data/ysi.rds")
 ysi$neg.depth <- -1 * ysi$depth.m
 # ysi.DT <- as.data.table(ysi)
+# convert temp to F:
+ysi$temp.F <- (ysi$temp.C * 9/5) + 32
 
 secchi <- readRDS("data/secchi.rds")
 secchi <- separate(data = secchi, col = sample.date, into = c("Year", "Month", "Day"), remove = FALSE)

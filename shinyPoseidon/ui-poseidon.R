@@ -6,9 +6,10 @@ ui <- fluidPage(
       
       uiOutput("year.dropdown.menu"), 
       
-      uiOutput("slider.text.widget")
+      uiOutput("slider.text.widget"),
       
-      
+      uiOutput("TempSelection")
+
     ),
     
     mainPanel(
