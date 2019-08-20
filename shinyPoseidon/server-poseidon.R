@@ -37,7 +37,7 @@ server <- function(input,output){
       source(file = "plots/temp_profile_daily.R", local = TRUE)
     }) } )
   
-  observeEvent( input$chosen.year, {
+  observeEvent( input$slider.day, {
     output$temp.profile2 <- renderPlot({
       cat("\ntemp tab- input$chosen.year\n")
       cat(input$chosen.year, "\n")
@@ -55,7 +55,7 @@ server <- function(input,output){
       source(file = "plots/DO_profile_daily.R", local = TRUE)
     }) } )
   
-  observeEvent( input$chosen.year, {
+  observeEvent( input$slider.day, {
     output$do.profile2 <- renderPlot({
       cat("\nDO tab- input$chosen.year\n")
       cat(input$chosen.year, "\n")
