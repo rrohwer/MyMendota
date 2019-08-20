@@ -4,6 +4,7 @@ if(!exists("INAPP")){
   input <- list(NULL)
   input$chosen.year <- "2014"
   input$slider.day <- "Jul 4"
+  input$TempPref="Fahrenheit"
 }
 
 
@@ -16,17 +17,17 @@ x.lim <- c(0, max(ysi$temp.C, na.rm = TRUE))
 x.lim.F <- c(32, max(ysi$temp.F, na.rm = TRUE))
 
 t.c=seq(0,25,0.5)
-y.c=sin(t.c)
+y.c=0.7*sin(t.c)
 
-t.f = seq(0,84,0.5)
-y.f = sin(t.f)
+t.f = seq(32,77,length.out=length(t.c))
+y.f = 0.7*sin(t.f/2+pi/2)
 
 
 par(mar = c(3,3,2,.5))
 
 if (input$TempPref == "Celcius"){
   plot(x = my.ysi$temp.C, y = my.ysi$neg.depth, type = "n", ylim = y.lim, xlim = x.lim, axes = F, ann = F)
-  plot(t.c,y.c, ylim = c(-20,1), xlim=x.lim, type="l", axes=F, ann=F)
+  plot(t.c,y.c, ylim = c(-20,1), xlim=x.lim, type="l", axes=F, ann=F,col='blue',lty=2,lwd=2)
   points(x = my.ysi$temp.C, y = my.ysi$neg.depth, pch = 21, col = "black", bg = adjustcolor("black",.5))
   axis(side = 1, at = x.lim, labels = F, lwd.ticks = 0)
   axis(side = 1, at = seq(from = 0, to = 25, by = 5), labels = F)
@@ -34,12 +35,13 @@ if (input$TempPref == "Celcius"){
   mtext(text = "Temperature (C)", side = 1, line = 1.75, outer = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+  text(2,1.1,labels="[Lake Surface: Depth=0]",cex=0.75)
   mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
   mtext(text = paste(input$slider.day, input$chosen.year, sep = ", "), side = 3, line = 0, outer = F, cex = 1.5)
   
 } else {
   plot(x = my.ysi$temp.F, y = my.ysi$neg.depth, type = "n", ylim = y.lim, xlim = x.lim.F, axes = F, ann = F)
-  plot(t.f,y.f, ylim = c(-20,1), xlim=x.lim.F, type="l", axes=F, ann=F)
+  plot(t.f,y.c, ylim = c(-20,1), xlim=x.lim.F, type="l", axes=F, ann=F,col='blue',lty=2,lwd=2)
   points(x = my.ysi$temp.F, y = my.ysi$neg.depth, pch = 21, col = "black", bg = adjustcolor("black",.5))
   axis(side = 1, at = x.lim.F, labels = F, lwd.ticks = 0)
   axis(side = 1, at = seq(from = 32, to = 77, by = 5), labels = F)
@@ -47,6 +49,7 @@ if (input$TempPref == "Celcius"){
   mtext(text = "Temperature (F)", side = 1, line = 1.75, outer = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
   axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+  text(35.6,1.1,labels="[Lake Surface: Depth=0]",cex=0.75)
   mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
   mtext(text = paste(input$slider.day, input$chosen.year, sep = ", "), side = 3, line = 0, outer = F, cex = 1.5)
   
