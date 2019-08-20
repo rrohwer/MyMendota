@@ -14,7 +14,6 @@ unique.dates <- decimal_date(unique(heatmap.data$sample.date))
 heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
 heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$temp.C, duplicate = "strip")
 
-my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 
 par(mar = c(4.5,3,2,0.5))
 
@@ -33,6 +32,8 @@ axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
 
 axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
 
+# show vertical line on heatmap for selected date
+my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 abline(v=decimal_date(my.date),col='black',lwd=4,lty=2)
 
 mtext(text = "Depth (m)", side = 2, line = 2, outer = F)

@@ -3,6 +3,7 @@ if(!exists("INAPP")){
   # Define "input" list for troubleshooting:
   input <- list(NULL)
   input$chosen.year <- "2015"
+  input$slider.day <- "Mar 7"
 }
 
 index <- which(ysi$Year == input$chosen.year)
@@ -25,6 +26,11 @@ axis(side = 1, at= unique.dates, col = "black", labels=day.choices, las=2)
 #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
 axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
 axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+
+# show vertical line on heatmap for selected date
+my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
+abline(v=decimal_date(my.date),col='black',lwd=4,lty=2)
+
 mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
 mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
 
