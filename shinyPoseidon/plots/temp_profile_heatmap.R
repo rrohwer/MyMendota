@@ -10,18 +10,18 @@ if(!exists("INAPP")){
 
 
 index <- which(ysi$Year == input$chosen.year)
-heatmap.data <- ysi[index, c(1,10,6)]
+heatmap.data <- ysi[index, c(1,10,6,11)]
 unique.dates <- decimal_date(unique(heatmap.data$sample.date))
 heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
-heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$temp.C, duplicate = "strip")
-
 
 par(mar = c(4.5,3,2,0.5))
 
 if(input$TempPref=="Celcius") {
-  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,30))
+  heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$temp.C, duplicate = "strip")
+  image.plot(heatmap.data, axes = F, col = magma(20),zlim=c(0,27))
 } else {
-  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(32,80))
+  heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth, z = heatmap.data$temp.F, duplicate = "strip")
+  image.plot(heatmap.data, axes = F, col = magma(20),zlim=c(32,81))
 }
 
 
