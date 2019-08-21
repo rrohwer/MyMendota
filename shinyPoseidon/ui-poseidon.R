@@ -32,7 +32,7 @@ ui <- fluidPage(
                   
       ),
       br(),
-      img(src = "logos.png", heigth=300, width= 792)
+      img(src = "logos.png", width= "90%")
     )
   )
 )
