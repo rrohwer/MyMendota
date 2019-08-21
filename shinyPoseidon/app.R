@@ -4,10 +4,9 @@ library(akima)
 library(colorspace)
 library(tidyr)
 library(ggplot2)
-#library(data.table)
 library(shinyWidgets)
-#install.packages("ggimage")
 library(ggimage)
+library(fields)
 
 ysi <- readRDS("data/ysi.rds")
 ysi$neg.depth <- -1 * ysi$depth.m

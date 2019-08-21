@@ -2,7 +2,7 @@ if(!exists("INAPP")){
   cat("[Info] DO_profile_heatmap.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
   # Define "input" list for troubleshooting:
   input <- list(NULL)
-  input$chosen.year <- "2015"
+  input$chosen.year <- "2014"
   input$slider.day <- "Mar 7"
 }
 
@@ -15,7 +15,7 @@ heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.
 
 par(mar = c(4.5,3,2,0.5))
 
-image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
+image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,20))
 day.choices <- unique(ysi$sample.date[index])
 day.choices <- paste(lubridate::month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
 
@@ -31,9 +31,7 @@ axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 abline(v=decimal_date(my.date),col='black',lwd=4,lty=2)
 
+mtext("mg/L",side=4,line=3.8,cex=1.5)
+
 mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
 mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
-
-
-
-
