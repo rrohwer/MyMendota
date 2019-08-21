@@ -57,6 +57,13 @@ server <- function(input,output){
   
   
   ## Secchi Tab 
+  observeEvent(eventExpr = input$chosen.year, {
+    output$secchi.individual <- renderPlot({
+      cat("\nsecchi tab- input$chosen.year\n")
+      cat(input$chosen.year, "\n")
+      cat(str(input$chosen.year), "\n")
+      source(file = "plots/secchi_moving.R", local = TRUE)
+    }) } )
   
   observeEvent(eventExpr = input$chosen.year, {
     output$secchi.plot <- renderPlot({

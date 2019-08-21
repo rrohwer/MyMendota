@@ -27,7 +27,9 @@ ui <- fluidPage(
                            plotOutput("do.profile2")
                   ),
                   tabPanel("Secchi", 
+                           plotOutput("secchi.individual"),
                            plotOutput("secchi.plot")
+                           
                   )
                   
       ),
