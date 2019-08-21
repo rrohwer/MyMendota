@@ -23,7 +23,7 @@ p.individual.date <-ggplot(data=sub.secchi, aes(x=sample.date, y=neg.depth, grou
   #xlim(min(sub.secchi$yday),max(sub.secchi$yday)) +
   ylim(-20,0) +
   ylab("Depth(m)")+
-  xlab("Day of Year") +
+  xlab("Month") +
   geom_line(data = sub.secchi, aes(x=sample.date, y=neg.depth),colour="lightblue")+
   geom_area(data = sub.secchi, aes(x=sample.date, y=neg.depth), fill="lightblue", alpha=1)+
   geom_point(data = sub.secchi, aes(x=sample.date, y=neg.depth), col="lightblue")+
