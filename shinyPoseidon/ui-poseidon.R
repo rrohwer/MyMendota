@@ -33,7 +33,7 @@ ui <- fluidPage(
                   
       ),
       br(),
-      img(src = "trina_lab.png", height = 200, width = 200)
+      img(src = "logos.png", heigth=300, width= 792)
     )
   )
 )
