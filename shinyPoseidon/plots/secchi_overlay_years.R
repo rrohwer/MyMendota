@@ -2,6 +2,7 @@ if(!exists("INAPP")){
   cat("[Info] secchi_overlay_years.R sourced for troubleshooting.\nMake sure to load data and packages from app.R first.\n")
   input <- list(NULL)
   input$chosen.year <- "2014"
+  input$slider.day <- "Jul 4"
 } #else {
 #  cat("[Info] secchi_overlay_years.R called by shiny app.\n")
 #}
