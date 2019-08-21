@@ -15,7 +15,7 @@ heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.
 
 par(mar = c(4.5,3,2,0.5))
 
-image.plot(heatmap.data, axes = F, col = viridis(20),zlim=c(0,16))
+image.plot(heatmap.data, axes = F, col = viridis(20),zlim=c(0,20))
 day.choices <- unique(ysi$sample.date[index])
 day.choices <- paste(lubridate::month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
 
