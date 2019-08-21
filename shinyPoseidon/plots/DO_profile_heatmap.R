@@ -15,7 +15,7 @@ heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.
 
 par(mar = c(4.5,3,2,0.5))
 
-image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,20))
+image.plot(heatmap.data, axes = F, col = viridis(20),zlim=c(0,14))
 day.choices <- unique(ysi$sample.date[index])
 day.choices <- paste(lubridate::month(x = day.choices, label = TRUE, abbr = TRUE), day(x = day.choices))
 
@@ -35,3 +35,4 @@ mtext("mg/L",side=4,line=3.8,cex=1.5)
 
 mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
 mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
+

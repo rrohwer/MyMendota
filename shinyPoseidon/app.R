@@ -7,6 +7,7 @@ library(ggplot2)
 library(shinyWidgets)
 library(ggimage)
 library(fields)
+library(viridis)
 
 ysi <- readRDS("data/ysi.rds")
 ysi$neg.depth <- -1 * ysi$depth.m

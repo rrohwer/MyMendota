@@ -19,9 +19,9 @@ heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth,
 par(mar = c(4.5,3,2,0.5))
 
 if(input$TempPref=="Celcius") {
-  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,30))
+  image.plot(heatmap.data, axes = F, col = magma(20),zlim=c(5,26))
 } else {
-  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(32,80))
+  image.plot(heatmap.data, axes = F, col = magma(20),zlim=c(41,80))
 }
 
 
