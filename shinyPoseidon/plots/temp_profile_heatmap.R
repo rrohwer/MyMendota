@@ -4,6 +4,7 @@ if(!exists("INAPP")){
   input <- list(NULL)
   input$chosen.year <- "2014"
   input$slider.day <- "Nov 9"
+  input$TempPref <- "Celcius"
 }
 
 
@@ -17,7 +18,11 @@ heatmap.data <- interp(x = heatmap.data$sample.date, y = heatmap.data$neg.depth,
 
 par(mar = c(4.5,3,2,0.5))
 
-image(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"))
+if(input$TempPref=="Celcius") {
+  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,30))
+} else {
+  image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(32,80))
+}
 
 
 day.choices <- unique(ysi$sample.date[index])
@@ -35,6 +40,14 @@ axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to
 # show vertical line on heatmap for selected date
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 abline(v=decimal_date(my.date),col='black',lwd=4,lty=2)
+
+if(input$TempPref=="Celcius") {
+  mtext("deg C",side=4,line=4,cex=1.5)
+} else
+{
+  mtext("deg F",side=4,line=4,cex=1.5)
+  #text(heatmap.data$x[length(heatmap.data$x)]+0.04,0,labels="deg F",cex=1.00,xpd=T)
+}
 
 mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
 mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
