@@ -40,6 +40,7 @@ if (dim(my.secchi)[1] != 0) {
     p <- p + geom_image(data = my.secchi, aes(image=image),asp = 1.90, size=0.025)
 }
 
-p <- p+theme(legend.position="none")
+p <- p+theme(legend.position="none")+
+  ggtitle("Annual Secchi Disk Measurements")
 
 print(p) # ggplot objects must be explicitly returned with print() when called by sourcing.
