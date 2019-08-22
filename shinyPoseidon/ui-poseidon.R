@@ -6,21 +6,21 @@ ui <- fluidPage(
       
       uiOutput("year.dropdown.menu"), 
       
-      uiOutput("slider.text.widget"),
-      
-      radioButtons(inputId = "TempPref",
-      label="Temperature Units:",
-      choices = c("Celcius", "Fahrenheit"),
-      selected="Fahrenheit",
-      inline = TRUE)
-
-    ),
+      uiOutput("slider.text.widget")
+   ),
     
     mainPanel(
       tabsetPanel(type = "tabs",
                   tabPanel("Temperature", 
-                           plotOutput("temp.profile1"),
-                           plotOutput("temp.profile2")
+                          br(),
+                          radioButtons(inputId = "TempPref",
+                            label="Temperature Units:",
+                            choices = c("Celcius", "Fahrenheit"),
+                            selected="Fahrenheit",
+                            inline = TRUE),
+                          br(),
+                          plotOutput("temp.profile1"),
+                          plotOutput("temp.profile2")
                   ),
                   tabPanel("Dissolved oxygen", 
                            plotOutput("do.profile1"),

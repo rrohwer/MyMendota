@@ -12,18 +12,21 @@ sub.secchi<-subset(secchi, secchi$Year == input$chosen.year)
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 index <- which(secchi$sample.date == my.date)
 my.secchi <- secchi[index, ]
+my.secchi$sample.date <- as.Date(my.secchi$sample.date)
+
+sub.secchi$sample.date <- as.Date(sub.secchi$sample.date)
 
 ## Draw a plot from 0m to 20m for the secchi depth of that year
-p.individual.date <-ggplot(data=sub.secchi, aes(x=yday, y=neg.depth, group=Year)) +
+p.individual.date <-ggplot(data=sub.secchi, aes(x=sample.date, y=neg.depth, group=Year)) +
   geom_line() +
   geom_point() +
-  xlim(min(sub.secchi$yday),max(sub.secchi$yday)) +
+  #xlim(min(sub.secchi$yday),max(sub.secchi$yday)) +
   ylim(-20,0) +
   ylab("Depth(m)")+
-  xlab("Day of Year") +
-  geom_line(data = sub.secchi, aes(x=yday, y=neg.depth),colour="lightblue")+
-  geom_area(data = sub.secchi, aes(x=yday, y=neg.depth), fill="lightblue", alpha=1)+
-  geom_point(data = sub.secchi, aes(x=yday, y=neg.depth), col="lightblue")+
+  xlab("Month") +
+  geom_line(data = sub.secchi, aes(x=sample.date, y=neg.depth),colour="lightblue")+
+  geom_area(data = sub.secchi, aes(x=sample.date, y=neg.depth), fill="lightblue", alpha=1)+
+  geom_point(data = sub.secchi, aes(x=sample.date, y=neg.depth), col="lightblue")+
   # Background colours:
   theme(panel.background = element_rect(fill = "darkblue",
                                         colour = "darkblue",
@@ -31,7 +34,8 @@ p.individual.date <-ggplot(data=sub.secchi, aes(x=yday, y=neg.depth, group=Year)
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank())+
-  ggtitle(paste("Secchi disk measurements in",input$chosen.year))
+  ggtitle(paste("Secchi disk measurements in",input$chosen.year))+
+  scale_x_date(date_labels = "%b", date_breaks = "1 month")
 
 if (dim(my.secchi)[1] != 0) {
   my.secchi$image <- "www/secchi.png"
