@@ -10,6 +10,7 @@ library(fields)
 library(viridis)
 
 ysi <- readRDS("data/ysi.rds")
+ysi$depth.m = ysi$depth.m * 3.28 #<<<<<<<<<AAAARRRRHHHHHH I'm converting m to feet here!!!!
 ysi$neg.depth <- -1 * ysi$depth.m
 # ysi.DT <- as.data.table(ysi)
 # convert temp to F:
