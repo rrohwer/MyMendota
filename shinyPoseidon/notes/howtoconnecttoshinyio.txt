@@ -1,0 +1,15 @@
+How to connect to shiny hosting page
+
+[one-time per Rstudio version set-up]
+got to shinyapps.io
+log in (gmail)
+in Rstudio, tools > global options > publishing
+click connect, select shinyapps.io
+follow directions to paste the token+secret from web into rstudio box
+
+[every time to deploy the app]
+
+library(rsconnect)
+?deployApp
+deployApp(appDir = "~/Desktop/MyMendota/shinyPoseidon/", logLevel = "verbose", appName = "MyMendota", forceUpdate = TRUE)
+forceUpdate = T is needed when it's been deployed already, but want to update it.
