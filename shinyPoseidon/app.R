@@ -18,6 +18,7 @@ ysi$temp.F <- (ysi$temp.C * 9/5) + 32
 
 secchi <- readRDS("data/secchi.rds")
 secchi <- separate(data = secchi, col = sample.date, into = c("Year", "Month", "Day"), remove = FALSE)
+secchi$secchi.depth.m <- secchi$secchi.depth.m * 3.28 #<<<<<<<<<AAAARRRRHHHHHH I'm converting m to feet here!!!!
 secchi$neg.depth <- -1 * secchi$secchi.depth.m
 secchi$yday <- yday(secchi$sample.date)
 
