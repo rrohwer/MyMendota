@@ -21,8 +21,8 @@ p.individual.date <-ggplot(data=sub.secchi, aes(x=sample.date, y=neg.depth, grou
   geom_line() +
   geom_point() +
   #xlim(min(sub.secchi$yday),max(sub.secchi$yday)) +
-  ylim(-20,0) +
-  ylab("Depth(m)")+
+  ylim(-66,0) +
+  ylab("Depth (feet)")+
   xlab("Month") +
   geom_line(data = sub.secchi, aes(x=sample.date, y=neg.depth),colour="lightblue")+
   geom_area(data = sub.secchi, aes(x=sample.date, y=neg.depth), fill="lightblue", alpha=1)+
@@ -40,7 +40,7 @@ p.individual.date <-ggplot(data=sub.secchi, aes(x=sample.date, y=neg.depth, grou
 if (dim(my.secchi)[1] != 0) {
   my.secchi$image <- "www/secchi.png"
   p.individual.date <- p.individual.date + geom_image(data = my.secchi, aes(image=image),asp = 1.90, size=0.025)
-  p.individual.date <- p.individual.date + geom_text(data=my.secchi, aes(x=sample.date,y=neg.depth,label=paste( format(round(abs(neg.depth),2),nsmall=2), "m")),nudge_y=-2,colour="white",size=5)
+  p.individual.date <- p.individual.date + geom_text(data=my.secchi, aes(x=sample.date,y=neg.depth,label=paste( format(round(abs(neg.depth),2),nsmall=2), "feet")),nudge_y=-3,colour="white",size=5)
 }
 
 print(p.individual.date)

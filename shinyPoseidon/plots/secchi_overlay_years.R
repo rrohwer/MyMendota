@@ -11,7 +11,7 @@ p <- ggplot(data=secchi, aes(x=yday, y=neg.depth, group=Year)) +
   geom_line() +
   geom_point() +
   xlim(0,365) +
-  ylab("Depth(m)")+
+  ylab("Depth (feet)")+
   xlab("Day of Year")
 
 #p
