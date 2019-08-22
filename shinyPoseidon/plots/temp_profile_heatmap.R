@@ -35,9 +35,9 @@ axis(side = 1, at= unique.dates, col = "black", labels=as.character(day.choices)
 # axis(side = 1, tick = T, line = 0, at = 2015 + yday(date.options)/365, srt = 90)
      #at = 2015 + c(176, 182, 195, 204, 217, 222, 266, 278, 293, 310)/365,
      #label = c("6-24", "6-30", "7-13", "7-22", "8-04", "9-22", "10-04", "10-19", "11-05")
-axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = F)
+axis(side = 2, at = seq(from = -65, to = 0, by = 5), labels = F)
 
-axis(side = 2, at = seq(from = -20, to = 0, by = 4), labels = seq(from = -20, to = 0, by = 4) * -1, tick = 0, line = -.25, las = 2)
+axis(side = 2, at = seq(from = -65, to = 0, by = 5), labels = seq(from = -65, to = 0, by = 5) * -1, tick = 0, line = -.25, las = 2)
 
 # show vertical line on heatmap for selected date
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
@@ -51,7 +51,7 @@ if(input$TempPref=="Celcius") {
   #text(heatmap.data$x[length(heatmap.data$x)]+0.04,0,labels="deg F",cex=1.00,xpd=T)
 }
 
-mtext(text = "Depth (m)", side = 2, line = 2, outer = F)
+mtext(text = "Depth (feet)", side = 2, line = 2, outer = F)
 mtext(text = input$chosen.year, side = 3, line = 0, outer = F, cex = 1.5)
 
 

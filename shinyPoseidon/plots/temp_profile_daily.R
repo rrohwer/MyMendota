@@ -43,7 +43,7 @@ axis(side = 1, at = x.ax.locs, tick = 0, labels = T, line = -.5)
 mtext(text = ax.lab, side = 1, line = 1.75, outer = F)
 axis(side = 2, at = seq(from = -65, to = 0, by = 5), labels = F)
 axis(side = 2, at = seq(from = -65, to = 0, by = 5), labels = seq(from = -65, to = 0, by = 5) * -1, tick = 0, line = -.25, las = 2)
-text(x = x.lim[1], y = 4, labels="(Lake Surface: Depth = 0)", cex = 0.75, xpd = NA)
+text(x = x.lim[1], y = 5, labels="(Lake Surface: Depth = 0)", cex = 0.75, xpd = NA)
 mtext(text = "Depth (feet)", side = 2, line = 2, outer = F)
 mtext(text = paste(input$slider.day, input$chosen.year, sep = ", "), side = 3, line = 1.7, outer = F, cex = 1.5)
 
