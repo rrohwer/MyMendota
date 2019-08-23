@@ -15,7 +15,7 @@ ui <- fluidPage(
                           br(),
                           radioButtons(inputId = "TempPref",
                             label="Temperature Units:",
-                            choices = c("Celcius", "Fahrenheit"),
+                            choices = c("Celsius", "Fahrenheit"),
                             selected="Fahrenheit",
                             inline = TRUE),
                           br(),

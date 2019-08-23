@@ -14,7 +14,7 @@ my.ysi <- ysi[index, ]
 
 y.lim <- c(-65.6,0)
 
-if(input$TempPref == "Celcius"){
+if(input$TempPref == "Celsius"){
   t <- seq(from = 0, to = 25, length.out = 100)
   y <- -abs(x = 3.0 * sin(t))
   y <- y - min(y)

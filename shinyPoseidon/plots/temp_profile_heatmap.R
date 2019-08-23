@@ -4,7 +4,7 @@ if(!exists("INAPP")){
   input <- list(NULL)
   input$chosen.year <- "2014"
   input$slider.day <- "Nov 9"
-  input$TempPref <- "Celcius"
+  input$TempPref <- "Celsius"
 }
 
 
@@ -16,7 +16,7 @@ heatmap.data$sample.date <- decimal_date(heatmap.data$sample.date)
 
 par(mar = c(4.5,3,2,0.5))
 
-if(input$TempPref=="Celcius") {
+if(input$TempPref=="Celsius") {
   valid.indexes = !is.na(heatmap.data$temp.C)
   heatmap.data <- interp(x = heatmap.data$sample.date[valid.indexes], y = heatmap.data$neg.depth[valid.indexes], z = heatmap.data$temp.C[valid.indexes], duplicate = "strip")
   image.plot(heatmap.data, axes = F, col = sequential_hcl(n = 20, palette = "plasma"),zlim=c(0,27))
@@ -43,7 +43,7 @@ axis(side = 2, at = seq(from = -65, to = 0, by = 5), labels = seq(from = -65, to
 my.date <- parse_date_time(x = paste(input$slider.day, input$chosen.year), orders = "mdy")
 abline(v=decimal_date(my.date),col='black',lwd=4,lty=2)
 
-if(input$TempPref=="Celcius") {
+if(input$TempPref=="Celsius") {
   mtext("deg C",side=4,line=4,cex=1.5)
 } else
 {
